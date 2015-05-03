@@ -22,6 +22,17 @@ function newGame() {
   };
 }
 
+function endGame() {
+  if (!player) {
+    return;
+  }
+
+  if (player.score > highScore) {
+    highScore = player.score;
+  }
+  player = null;
+}
+
 Gesso.getCanvas().addEventListener('mousedown', function (e) {
   e.preventDefault();
 
@@ -69,6 +80,9 @@ game.update(function () {
   if (frameCount % 6 === 0) {
     player.score += 100;
   }
+  if (player.sy > 1) {
+    player.sy -= 0.1;
+  }
   if (player.best && player.score > player.best) {
     player.best = player.score;
   }
@@ -78,10 +92,7 @@ game.update(function () {
   }
   player.y += player.velocity;
   if (player.y >= game.height) {
-    player.y = 0;
-  }
-  if (player.sy > 1) {
-    player.sy -= 0.1;
+    endGame();
   }
 });
 
