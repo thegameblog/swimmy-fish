@@ -4,47 +4,44 @@ var helpers = require('./helpers');
 var game = new Gesso();
 var gravity = 0.3;
 var seaLevel = 80;
-var player = {
-  x: 100,
-  y: 200,
-  sy: 1,
-  velocity: -10,
-  jumpVelocity: 8,
-  terminalVelocity: 7,
-  score: 0,
-  best: 0
-};
+var player = null;
 var rocks = [];
 var frameCount = 0;
+var highScore = 0;
+
+function newGame() {
+  player = {
+    playing: false,
+    x: 100,
+    y: 200,
+    sy: 1,
+    velocity: -10,
+    jumpVelocity: 8,
+    terminalVelocity: 7,
+    score: 0
+  };
+}
 
 Gesso.getCanvas().addEventListener('mousedown', function (e) {
-  e.stopPropagation();
   e.preventDefault();
+
+  // Create new player, if not currently playing
+  if (!player) {
+    newGame();
+    return false;
+  }
+
+  // Swim / jump
   if (player.y > seaLevel) {
     player.velocity = -player.jumpVelocity;
     player.sy = 1.6;
   }
+
   return false;
 });
 
 game.update(function () {
   frameCount += 1;
-
-  // Update player
-  if (frameCount % 6 === 0) {
-    player.score += 100;
-  }
-  player.velocity += gravity;
-  if (player.velocity > player.terminalVelocity) {
-    player.velocity = player.terminalVelocity;
-  }
-  player.y += player.velocity;
-  if (player.y >= game.height) {
-    player.y = 0;
-  }
-  if (player.sy > 1) {
-    player.sy -= 0.1;
-  }
 
   // Update rocks
   for (var r = 0; r < rocks.length; r++) {
@@ -63,6 +60,29 @@ game.update(function () {
       height: 200 + Math.random() * 100
     });
   }
+
+  if (!player) {
+    return;
+  }
+
+  // Update player
+  if (frameCount % 6 === 0) {
+    player.score += 100;
+  }
+  if (player.best && player.score > player.best) {
+    player.best = player.score;
+  }
+  player.velocity += gravity;
+  if (player.velocity > player.terminalVelocity) {
+    player.velocity = player.terminalVelocity;
+  }
+  player.y += player.velocity;
+  if (player.y >= game.height) {
+    player.y = 0;
+  }
+  if (player.sy > 1) {
+    player.sy -= 0.1;
+  }
 });
 
 game.render(function (ctx) {
@@ -74,21 +94,34 @@ game.render(function (ctx) {
   ctx.fillStyle = '#35f';
   ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
 
-  // Score
-  ctx.font = 'bold 24px sans-serif';
-  ctx.textAlign = 'right';
-  helpers.outlineText(ctx, 'Score: ' + player.score, game.width - 30, 32, '#333', '#fff');
-
   // Draw rocks
   for (var r = 0; r < rocks.length; r++) {
     ctx.fillStyle = '#5d4';
     ctx.fillRect(rocks[r].x, rocks[r].y, rocks[r].width, rocks[r].height);
   }
 
+  // Draw pre-game
+  if (!player) {
+    if ((frameCount % 120 > 5 && frameCount % 120 < 20) || frameCount % 120 > 25) {
+      ctx.font = 'bold 64px sans-serif';
+      ctx.textAlign = 'center';
+      helpers.outlineText(ctx, 'Click to start!', (game.width / 2), (game.height / 2) - 50, '#333', '#fff');
+    }
+    return;
+  }
+
   // Draw player
   ctx.save();
   helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
   helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
+
+  // Score
+  ctx.font = 'bold 24px sans-serif';
+  ctx.textAlign = 'right';
+  helpers.outlineText(ctx, 'Score: ' + player.score, game.width - 30, 32, '#333', '#fff');
+  if (highScore) {
+    helpers.outlineText(ctx, 'Best: ' + highScore, game.width - 30, 64, '#333', '#fff');
+  }
 });
 
 // TODO: Delete this
