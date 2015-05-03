@@ -59,9 +59,6 @@ game.update(function () {
     rocks[r].x -= 5;
   }
 
-  // Check for collisions
-  // TODO: implement
-
   // Create a new rock
   if (frameCount % 100 === 0) {
     rocks.push({
@@ -72,8 +69,17 @@ game.update(function () {
     });
   }
 
+  // Skip player logic if not currently playing
   if (!player) {
     return;
+  }
+
+  // Check for collisions
+  for (r = 0; r < rocks.length; r++) {
+    if (helpers.intersected({x: player.x, y: player.y, width: 20, height: 10}, rocks[r])) {
+      endGame();
+      return;
+    }
   }
 
   // Update player
@@ -93,6 +99,7 @@ game.update(function () {
   player.y += player.velocity;
   if (player.y >= game.height) {
     endGame();
+    return;
   }
 });
 
