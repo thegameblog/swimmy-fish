@@ -111,12 +111,27 @@ game.render(function (ctx) {
     ctx.fillRect(rocks[r].x, rocks[r].y, rocks[r].width, rocks[r].height);
   }
 
+  // Draw score
+  if (player || highScore) {
+    ctx.font = 'bold 24px sans-serif';
+    ctx.textAlign = 'right';
+    helpers.outlineText(ctx, 'Score: ' + (player ? player.score : 0), game.width - 30, 32, '#333', '#fff');
+  }
+  if (highScore) {
+    helpers.outlineText(ctx, 'Best: ' + highScore, game.width - 30, 64, '#333', '#fff');
+  }
+
   // Draw pre-game
   if (!player) {
     if ((frameCount % 120 > 5 && frameCount % 120 < 20) || frameCount % 120 > 25) {
       ctx.font = 'bold 64px sans-serif';
       ctx.textAlign = 'center';
-      helpers.outlineText(ctx, 'Click to start!', (game.width / 2), (game.height / 2) - 50, '#333', '#fff');
+      if (highScore) {
+        helpers.outlineText(ctx, 'Game over!', (game.width / 2), (game.height / 2) - 90, '#333', '#fff');
+        helpers.outlineText(ctx, 'Click again!', (game.width / 2), (game.height / 2) - 10, '#333', '#fff');
+      } else {
+        helpers.outlineText(ctx, 'Click to start!', (game.width / 2), (game.height / 2) - 50, '#333', '#fff');
+      }
     }
     return;
   }
@@ -125,14 +140,6 @@ game.render(function (ctx) {
   ctx.save();
   helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
   helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
-
-  // Score
-  ctx.font = 'bold 24px sans-serif';
-  ctx.textAlign = 'right';
-  helpers.outlineText(ctx, 'Score: ' + player.score, game.width - 30, 32, '#333', '#fff');
-  if (highScore) {
-    helpers.outlineText(ctx, 'Best: ' + highScore, game.width - 30, 64, '#333', '#fff');
-  }
 });
 
 // TODO: Delete this
