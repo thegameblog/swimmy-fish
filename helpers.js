@@ -6,6 +6,7 @@ module.exports = {
     ctx.fill();
   },
   fillEllipse: function (ctx, x, y, r, sx, sy, color) {
+    ctx.save();
     ctx.translate(-x * (sx - 1), -y * (sy - 1));
     ctx.scale(sx, sy);
     ctx.beginPath();

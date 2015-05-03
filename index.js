@@ -137,7 +137,6 @@ game.render(function (ctx) {
   }
 
   // Draw player
-  ctx.save();
   helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
   helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
 });
