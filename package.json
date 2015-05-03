@@ -1,0 +1,13 @@
+{
+  "name": "swimmy-fish",
+  "version": "1.0.0",
+  "author": "Joe Esposito <joe@joeyespo.com>",
+  "description": "Just keep swimming. And clicking. Swim over and under obstacles to survive as long as you can.",
+  "homepage": "http://github.com/gessojs/games",
+  "license": "MIT",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "gesso": "^0.10.0"
+  }
+}
