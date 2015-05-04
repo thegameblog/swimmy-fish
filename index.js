@@ -10,6 +10,8 @@ var frameCount = 0;
 var highScore = 0;
 var highScoreTime = 0;
 var highScoreMaxTime = 60;
+var particles = [];
+var endGameParticleCount = 100;
 
 function newGame() {
   player = {
@@ -29,12 +31,26 @@ function endGame() {
     return;
   }
 
+  // Set the new high score, animating it, if the record was broken
   if (player.score > highScore) {
     highScore = player.score;
     highScoreTime = highScoreMaxTime;
   }
+
+  // Explode
+  for (var index = 0; index < endGameParticleCount; index++) {
+    var angle = helpers.randInt(0, 360);
+    var velocity = helpers.randInt(10, 20);
+    particles.push({
+      x: player.x,
+      y: player.y,
+      vx: Math.cos(angle * Math.PI / 180) * velocity - 6,
+      vy: Math.sin(angle * Math.PI / 180) * velocity
+    });
+  }
+
+  // Set to not playing
   player = null;
-  // TODO: particle explosion
 }
 
 Gesso.getCanvas().addEventListener('mousedown', function (e) {
@@ -61,6 +77,7 @@ game.update(function () {
   // Update rocks
   for (var r = 0; r < rocks.length; r++) {
     rocks[r].x -= 5;
+    // TODO: Delete old rocks
   }
 
   // Create a new rock
@@ -69,10 +86,17 @@ game.update(function () {
   if (frameCount % 100 === 0) {
     rocks.push({
       x: game.width,
-      y: Math.random() * game.height,
-      width: 100,
-      height: 200 + Math.random() * 100
+      y: helpers.randInt(50, game.height),
+      width: helpers.randInt(100, 150),
+      height: helpers.randInt(200, 300)
     });
+  }
+
+  // Update particles
+  for (var p = 0; p < particles.length; p++) {
+    particles[p].x -= particles[p].vx;
+    particles[p].y -= particles[p].vy;
+    // TODO: Delete old particles
   }
 
   // Skip player logic if not currently playing
@@ -124,6 +148,11 @@ game.render(function (ctx) {
     ctx.fillRect(rocks[r].x, rocks[r].y, rocks[r].width, rocks[r].height);
   }
 
+  // Draw particles
+  for (var p = 0; p < particles.length; p++) {
+    helpers.fillCircle(ctx, particles[p].x, particles[p].y, 3, '#ff4');
+  }
+
   // Draw score
   if (player || highScore) {
     ctx.font = 'bold 24px sans-serif';
@@ -143,7 +172,7 @@ game.render(function (ctx) {
     }
   }
 
-  // Draw pre-game
+  // Draw pre-game text
   if (!player) {
     if ((frameCount % 120 > 5 && frameCount % 120 < 20) || frameCount % 120 > 25) {
       ctx.font = 'bold 64px sans-serif';

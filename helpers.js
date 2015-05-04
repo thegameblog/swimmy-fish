@@ -1,4 +1,7 @@
 module.exports = {
+  randInt: function(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
+  },
   fillCircle: function (ctx, x, y, r, color) {
     ctx.beginPath();
     ctx.arc(x, y, r, 0, 2 * Math.PI, false);
