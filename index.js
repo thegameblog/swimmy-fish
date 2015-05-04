@@ -77,7 +77,11 @@ game.update(function () {
   // Update rocks
   for (var r = 0; r < rocks.length; r++) {
     rocks[r].x -= 5;
-    // TODO: Delete old rocks
+    // Delete rock when out of bounds
+    if (rocks[r].x + rocks[r].width < 0) {
+      rocks.splice(r, 1);
+      r--;
+    }
   }
 
   // Create a new rock
@@ -96,7 +100,12 @@ game.update(function () {
   for (var p = 0; p < particles.length; p++) {
     particles[p].x -= particles[p].vx;
     particles[p].y -= particles[p].vy;
-    // TODO: Delete old particles
+    // Delete particle when out of bounds
+    if (particles[p].x + 3 < 0 || particles[p].y + 3 < 0 ||
+        particles[p].x - 3 > game.width || particles[p].y - 3 > game.height) {
+      particles.splice(p, 1);
+      p--;
+    }
   }
 
   // Skip player logic if not currently playing
