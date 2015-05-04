@@ -8,6 +8,8 @@ var player = null;
 var rocks = [];
 var frameCount = 0;
 var highScore = 0;
+var highScoreTime = 0;
+var highScoreMaxTime = 60;
 
 function newGame() {
   player = {
@@ -29,8 +31,10 @@ function endGame() {
 
   if (player.score > highScore) {
     highScore = player.score;
+    highScoreTime = highScoreMaxTime;
   }
   player = null;
+  // TODO: particle explosion
 }
 
 Gesso.getCanvas().addEventListener('mousedown', function (e) {
@@ -60,6 +64,8 @@ game.update(function () {
   }
 
   // Create a new rock
+  // TODO: Difficulty
+  // TODO: Top / bottom pattern
   if (frameCount % 100 === 0) {
     rocks.push({
       x: game.width,
@@ -125,7 +131,16 @@ game.render(function (ctx) {
     helpers.outlineText(ctx, 'Score: ' + (player ? player.score : 0), game.width - 30, 32, '#333', '#fff');
   }
   if (highScore) {
+    ctx.font = 'bold 24px sans-serif';
     helpers.outlineText(ctx, 'Best: ' + highScore, game.width - 30, 64, '#333', '#fff');
+    if (highScoreTime > 0) {
+      var offset = (highScoreMaxTime - highScoreTime) / 2;
+      var fade = (highScoreTime / highScoreMaxTime);
+      ctx.font = 'bold ' + (24 + offset) + 'px sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, ' + fade + ')';
+      ctx.fillText('Best: ' + highScore, game.width - 30 + (offset * 1.5), 64 + (offset / 2.8));
+      highScoreTime -= 1;
+    }
   }
 
   // Draw pre-game
@@ -146,6 +161,8 @@ game.render(function (ctx) {
   // Draw player
   helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
   helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
+
+  // TODO: Draw bubbles
 });
 
 // TODO: Delete this
