@@ -13,6 +13,7 @@ var highScoreMaxTime = 60;
 var particles = [];
 var endGameParticleCount = 100;
 var bottomLeeway = 60;
+var bubbles = [];
 
 function newGame() {
   player = {
@@ -54,6 +55,13 @@ function endGame() {
   player = null;
 }
 
+function newBubble(probability) {
+  if (player && helpers.randInt(1, probability) === 1) {
+    bubbles.push({x: player.x, y: player.y, r: helpers.randInt(2, 4)});
+  }
+}
+
+
 Gesso.getCanvas().addEventListener('mousedown', function (e) {
   e.preventDefault();
 
@@ -67,6 +75,7 @@ Gesso.getCanvas().addEventListener('mousedown', function (e) {
   if (player.y > seaLevel) {
     player.velocity = -player.jumpVelocity;
     player.sy = 1.6;
+    newBubble(10);
   }
 
   return false;
@@ -95,6 +104,35 @@ game.update(function () {
       width: helpers.randInt(100, 150),
       height: helpers.randInt(200, 300)
     });
+  }
+
+  // Update bubbles
+  for (var b = 0; b < bubbles.length; b++) {
+    bubbles[b].x -= 3;
+    if (helpers.randInt(1, 3) === 1) {
+      bubbles[b].x -= 1;
+    }
+    if (helpers.randInt(1, 5)) {
+      bubbles[b].y += helpers.randInt(-3, 1);
+    }
+    // Delete bubble when out of bounds
+    if (bubbles[b].x + bubbles[b].r < 0 || bubbles[b].y <= seaLevel) {
+      bubbles.splice(b, 1);
+      b--;
+    }
+  }
+  // Randomly add a new bubble
+  if (player) {
+    newBubble(100);
+  }
+  // Check for rock / bubble collisions
+  for (r = 0; r < rocks.length; r++) {
+    for (b = 0; b < bubbles.length; b++) {
+      if (helpers.intersected({x: bubbles[b].x, y: bubbles[b].y, width: bubbles[b].r, height: bubbles[b].r}, rocks[r])) {
+        bubbles.splice(b, 1);
+        b--;
+      }
+    }
   }
 
   // Update particles
@@ -179,6 +217,11 @@ game.render(function (ctx) {
   ctx.fillStyle = grd;
   ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
 
+  // Draw bubbles
+  for (var b = 0; b < bubbles.length; b++) {
+    helpers.fillCircle(ctx, bubbles[b].x, bubbles[b].y, bubbles[b].r, 'rgba(255, 255, 255, 0.8)');
+  }
+
   // Draw rocks
   for (var r = 0; r < rocks.length; r++) {
     ctx.fillStyle = '#5d4';
@@ -212,8 +255,6 @@ game.render(function (ctx) {
     // Draw player
     helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
     helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
-
-    // TODO: Draw bubbles
   }
 
   // Draw water depth gradient
