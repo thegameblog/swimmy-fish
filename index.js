@@ -12,6 +12,7 @@ var highScoreTime = 0;
 var highScoreMaxTime = 60;
 var particles = [];
 var endGameParticleCount = 100;
+var bottomLeeway = 60;
 
 function newGame() {
   player = {
@@ -102,7 +103,7 @@ game.update(function () {
     particles[p].y -= particles[p].vy;
     // Delete particle when out of bounds
     if (particles[p].x + 3 < 0 || particles[p].y + 3 < 0 ||
-        particles[p].x - 3 > game.width || particles[p].y - 3 > game.height) {
+        particles[p].x - 3 > game.width || particles[p].y - 3 > game.height + bottomLeeway) {
       particles.splice(p, 1);
       p--;
     }
@@ -136,7 +137,7 @@ game.update(function () {
     player.velocity = player.terminalVelocity;
   }
   player.y += player.velocity;
-  if (player.y >= game.height) {
+  if (player.y >= game.height + bottomLeeway) {
     endGame();
     return;
   }
@@ -148,22 +149,21 @@ game.render(function (ctx) {
   ctx.fillRect(0, 0, game.width, game.height);
 
   // Draw sky
-  grd = ctx.createLinearGradient(game.width / 2, 0.000, game.width / 2, seaLevel);
+  var grd = ctx.createLinearGradient(game.width / 2, 0.000, game.width / 2, seaLevel);
   grd.addColorStop(0.000, '#80befc');
   grd.addColorStop(1.000, '#cbcfed');
   ctx.fillStyle = grd;
   ctx.fillRect(0, 0, game.width, seaLevel);
 
   // Draw water
-  var grd = ctx.createLinearGradient(game.width / 2, 0.000, game.width / 2, game.height - seaLevel);
-  grd.addColorStop(0.000, '#007fff');
-  grd.addColorStop(0.100, '#fff');
-  grd.addColorStop(0.200, '#007fff');
+  grd = ctx.createLinearGradient(game.width / 2, seaLevel, game.width / 2, game.height - seaLevel);
+  grd.addColorStop(0.000, '#7EBDFC');
+  grd.addColorStop(0.100, '#007fff');
   grd.addColorStop(1.000, '#003f7f');
   ctx.fillStyle = grd;
   ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
 
-  // Water lighting
+  // Water lighting (note: coordinates are off, but the mistake looks better)
   grd = ctx.createLinearGradient(0, 0, game.width, game.height - seaLevel);
   grd.addColorStop(0.000, 'rgba(0, 127, 255, 0.200)');
   grd.addColorStop(0.100, 'rgba(255, 255, 255, 0.200)');
@@ -214,10 +214,10 @@ game.render(function (ctx) {
   }
 
   // Draw water depth gradient
-  grd = ctx.createLinearGradient(game.width / 2, 0.000, game.width / 2, game.height - seaLevel);
+  grd = ctx.createLinearGradient(game.width / 2, seaLevel, game.width / 2, game.height);
   grd.addColorStop(0.000, 'rgba(0, 127, 255, 0.100)');
   grd.addColorStop(0.700, 'rgba(0, 63, 127, 0.100)');
-  grd.addColorStop(1.000, 'rgba(0, 63, 127, 1.000)');
+  grd.addColorStop(1.000, 'rgba(0, 63, 127, 0.500)');
   ctx.fillStyle = grd;
   ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
 
