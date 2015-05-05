@@ -147,8 +147,32 @@ game.render(function (ctx) {
   ctx.fillStyle = '#ece';
   ctx.fillRect(0, 0, game.width, game.height);
 
+  // Draw sky
+  grd = ctx.createLinearGradient(game.width / 2, 0.000, game.width / 2, seaLevel);
+  grd.addColorStop(0.000, '#80befc');
+  grd.addColorStop(1.000, '#cbcfed');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, game.width, seaLevel);
+
   // Draw water
-  ctx.fillStyle = '#35f';
+  var grd = ctx.createLinearGradient(game.width / 2, 0.000, game.width / 2, game.height - seaLevel);
+  grd.addColorStop(0.000, '#007fff');
+  grd.addColorStop(0.100, '#fff');
+  grd.addColorStop(0.200, '#007fff');
+  grd.addColorStop(1.000, '#003f7f');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
+
+  // Water lighting
+  grd = ctx.createLinearGradient(0, 0, game.width, game.height - seaLevel);
+  grd.addColorStop(0.000, 'rgba(0, 127, 255, 0.200)');
+  grd.addColorStop(0.100, 'rgba(255, 255, 255, 0.200)');
+  grd.addColorStop(0.200, 'rgba(0, 127, 255, 0.200)');
+  grd.addColorStop(0.500, 'rgba(255, 255, 255, 0.200)');
+  grd.addColorStop(0.600, 'rgba(0, 127, 255, 0.200)');
+  grd.addColorStop(0.800, 'rgba(255, 255, 255, 0.200)');
+  grd.addColorStop(1.000, 'rgba(0, 127, 255, 0.200)');
+  ctx.fillStyle = grd;
   ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
 
   // Draw rocks
@@ -181,8 +205,24 @@ game.render(function (ctx) {
     }
   }
 
-  // Draw pre-game text
+  if (player) {
+    // Draw player
+    helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
+    helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
+
+    // TODO: Draw bubbles
+  }
+
+  // Draw water depth gradient
+  grd = ctx.createLinearGradient(game.width / 2, 0.000, game.width / 2, game.height - seaLevel);
+  grd.addColorStop(0.000, 'rgba(0, 127, 255, 0.100)');
+  grd.addColorStop(0.700, 'rgba(0, 63, 127, 0.100)');
+  grd.addColorStop(1.000, 'rgba(0, 63, 127, 1.000)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
+
   if (!player) {
+    // Draw pre-game text
     if ((frameCount % 120 > 5 && frameCount % 120 < 20) || frameCount % 120 > 25) {
       ctx.font = 'bold 64px sans-serif';
       ctx.textAlign = 'center';
@@ -193,14 +233,7 @@ game.render(function (ctx) {
         helpers.outlineText(ctx, 'Click to start!', (game.width / 2), (game.height / 2) - 50, '#333', '#fff');
       }
     }
-    return;
   }
-
-  // Draw player
-  helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
-  helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
-
-  // TODO: Draw bubbles
 });
 
 // TODO: Delete this
