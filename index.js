@@ -200,11 +200,11 @@ game.render(function (ctx) {
     ctx.font = 'bold 24px sans-serif';
     helpers.outlineText(ctx, 'Best: ' + highScore, game.width - 30, 64, '#333', '#fff');
     if (highScoreTime > 0) {
-      var offset = (highScoreMaxTime - highScoreTime) / 2;
-      var fade = (highScoreTime / highScoreMaxTime);
+      var offset = (highScoreTime) * 2;
+      var fade = (highScoreTime / highScoreMaxTime * 2);
       ctx.font = 'bold ' + (24 + offset) + 'px sans-serif';
       ctx.fillStyle = 'rgba(255, 255, 255, ' + fade + ')';
-      ctx.fillText('Best: ' + highScore, game.width - 30 + (offset * 1.5), 64 + (offset / 2.8));
+      ctx.fillText('Best: ' + highScore, game.width - 30 + (offset * 0.25), 64 + (offset * 1.5));
     }
   }
 
