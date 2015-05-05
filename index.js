@@ -109,6 +109,10 @@ game.update(function () {
     }
   }
 
+  if (highScoreTime > 0) {
+    highScoreTime -= 1;
+  }
+
   // Skip player logic if not currently playing
   if (!player) {
     return;
@@ -201,7 +205,6 @@ game.render(function (ctx) {
       ctx.font = 'bold ' + (24 + offset) + 'px sans-serif';
       ctx.fillStyle = 'rgba(255, 255, 255, ' + fade + ')';
       ctx.fillText('Best: ' + highScore, game.width - 30 + (offset * 1.5), 64 + (offset / 2.8));
-      highScoreTime -= 1;
     }
   }
 
