@@ -230,10 +230,10 @@ game.render(function (ctx) {
       ctx.font = 'bold 64px sans-serif';
       ctx.textAlign = 'center';
       if (highScore) {
-        helpers.outlineText(ctx, 'Game over!', (game.width / 2), (game.height / 2) - 90, '#333', '#fff');
-        helpers.outlineText(ctx, 'Click again!', (game.width / 2), (game.height / 2) - 10, '#333', '#fff');
+        helpers.outlineText(ctx, 'Game over!', (game.width / 2), (game.height / 2) - 30, '#333', '#fff');
+        helpers.outlineText(ctx, 'Click again!', (game.width / 2), (game.height / 2) + 40, '#333', '#fff');
       } else {
-        helpers.outlineText(ctx, 'Click to start!', (game.width / 2), (game.height / 2) - 50, '#333', '#fff');
+        helpers.outlineText(ctx, 'Click to start!', (game.width / 2), (game.height / 2), '#333', '#fff');
       }
     }
   }
