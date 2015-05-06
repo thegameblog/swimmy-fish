@@ -14,6 +14,7 @@ var particles = [];
 var endGameParticleCount = 100;
 var bottomLeeway = 60;
 var bubbles = [];
+var splash = [];
 
 function newGame() {
   player = {
@@ -55,12 +56,19 @@ function endGame() {
   player = null;
 }
 
+function newSplash() {
+  for (var s = 0; s < 20; s++) {
+    var ax = Math.random() * 4 - 3;
+    var ay = -(Math.random() * 2 + 1);
+    splash.push({x: player.x + ax, y: seaLevel, vx: ax, vy: ay, r: helpers.randInt(1, 2)});
+  }
+}
+
 function newBubble(probability) {
   if (player && helpers.randInt(1, probability) === 1) {
     bubbles.push({x: player.x, y: player.y, r: helpers.randInt(2, 4)});
   }
 }
-
 
 Gesso.getCanvas().addEventListener('mousedown', function (e) {
   e.preventDefault();
@@ -135,6 +143,18 @@ game.update(function () {
     }
   }
 
+  // Update splash
+  for (var s = 0; s < splash.length; s++) {
+    splash[s].x += splash[s].vx;
+    splash[s].y += splash[s].vy;
+    splash[s].vy += gravity;
+    // Delete splash
+    if (splash[s].y > seaLevel) {
+      splash.splice(s, 1);
+      s--;
+    }
+  }
+
   // Update particles
   for (var p = 0; p < particles.length; p++) {
     particles[p].x -= particles[p].vx;
@@ -183,6 +203,10 @@ game.update(function () {
     endGame();
     return;
   }
+  if ((player.y - player.velocity >= seaLevel && player.y < seaLevel) ||
+      (player.y - player.velocity <= seaLevel && player.y > seaLevel)) {
+    newSplash();
+  }
 });
 
 game.render(function (ctx) {
@@ -216,6 +240,11 @@ game.render(function (ctx) {
   grd.addColorStop(1.000, 'rgba(0, 127, 255, 0.200)');
   ctx.fillStyle = grd;
   ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
+
+  // Draw splash
+  for (var s = 0; s < splash.length; s++) {
+    helpers.fillCircle(ctx, splash[s].x, splash[s].y, splash[s].r, '#7EBDFC');
+  }
 
   // Draw bubbles
   for (var b = 0; b < bubbles.length; b++) {
