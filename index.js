@@ -104,7 +104,6 @@ game.update(function () {
 
   // Create a new rock
   // TODO: Difficulty
-  // TODO: Top / bottom pattern
   if (frameCount % 100 === 0) {
     rocks.push({
       x: game.width,
