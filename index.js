@@ -105,11 +105,13 @@ game.update(function () {
   // Create a new rock
   // TODO: Difficulty
   if (frameCount % 100 === 0) {
+    var floater = !!helpers.randInt(0, 1);
+    var height = helpers.randInt(200, 300);
     rocks.push({
       x: game.width,
-      y: helpers.randInt(50, game.height),
-      width: helpers.randInt(100, 150),
-      height: helpers.randInt(200, 300)
+      y: floater ? seaLevel - (10 * helpers.randInt(1, 2)) : game.height - height,
+      width: helpers.randInt(30, 150),
+      height: height
     });
   }
 
