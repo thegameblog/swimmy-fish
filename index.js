@@ -80,7 +80,7 @@ Gesso.getCanvas().addEventListener('mousedown', function (e) {
   }
 
   // Swim / jump
-  if (player.y > seaLevel) {
+  if (player.y + 5 > seaLevel) {
     player.velocity = -player.jumpVelocity;
     player.sy = 1.6;
     newBubble(10);
