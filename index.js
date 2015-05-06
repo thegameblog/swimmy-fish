@@ -27,6 +27,8 @@ function newGame() {
     terminalVelocity: 7,
     score: 0
   };
+  // Reset frame count
+  frameCount = 0;
 }
 
 function endGame() {
@@ -90,11 +92,50 @@ Gesso.getCanvas().addEventListener('mousedown', function (e) {
 });
 
 game.update(function () {
+  // Update frame count, which represents time passed
   frameCount += 1;
+
+  // Set difficulty as a function of time
+  var rockSpeed;
+  var newRockMaxWidth;
+  var newRockFrameCount;
+  if (frameCount <= 60) {
+    rockSpeed = 4;
+    newRockMaxWidth = 100;
+    newRockFrameCount = 60;
+  } else if (frameCount <= 400) {
+    rockSpeed = 4;
+    newRockMaxWidth = 100;
+    newRockFrameCount = 200;
+  } else if (frameCount <= 800) {
+    rockSpeed = 4;
+    newRockMaxWidth = 100;
+    newRockFrameCount = 100;
+  } else if (frameCount <= 1200) {
+    rockSpeed = 4;
+    newRockMaxWidth = 100;
+    newRockFrameCount = 80;
+  } else if (frameCount <= 2400) {
+    rockSpeed = 5;
+    newRockMaxWidth = 120;
+    newRockFrameCount = 75;
+  } else if (frameCount <= 3600) {
+    rockSpeed = 6;
+    newRockMaxWidth = 150;
+    newRockFrameCount = 75;
+  } else if (frameCount <= 4800) {
+    rockSpeed = 7;
+    newRockMaxWidth = 150;
+    newRockFrameCount = 65;
+  } else {
+    rockSpeed = 8;
+    newRockMaxWidth = 225;
+    newRockFrameCount = 65;
+  }
 
   // Update rocks
   for (var r = 0; r < rocks.length; r++) {
-    rocks[r].x -= 5;
+    rocks[r].x -= rockSpeed;
     // Delete rock when out of bounds
     if (rocks[r].x + rocks[r].width < 0) {
       rocks.splice(r, 1);
@@ -103,14 +144,13 @@ game.update(function () {
   }
 
   // Create a new rock
-  // TODO: Difficulty
-  if (frameCount % 100 === 0) {
+  if (frameCount % newRockFrameCount === 0) {
     var floater = !!helpers.randInt(0, 1);
     var height = helpers.randInt(200, 300);
     rocks.push({
       x: game.width,
       y: floater ? seaLevel - (10 * helpers.randInt(1, 2)) : game.height - height,
-      width: helpers.randInt(30, 150),
+      width: helpers.randInt(30, newRockMaxWidth),
       height: height
     });
   }
