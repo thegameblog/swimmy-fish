@@ -19,7 +19,7 @@ var bottomLeeway = 60;
 var bubbles = [];
 var splash = [];
 
-var levelStartFrames = [0, 60, 600, 1100, 2000, 3200, 4400, 5600];
+var levelStartFrames = [0, 60, 600, 1100, 2000, 3200, 4400, 5600, 6800];
 var levelStartScore = [];
 for (var levelStartScoreIndex = 0; levelStartScoreIndex < levelStartFrames.length; levelStartScoreIndex++) {
   levelStartScore.push(Math.floor(levelStartFrames[levelStartScoreIndex] / scoreFrameCount * scoreIncrement / 2));
@@ -32,8 +32,8 @@ var levels = {
   4: {rockSpeed: 5, newRockMaxWidth: 120, newRockFrameCount: 75, burst: null},
   5: {rockSpeed: 6, newRockMaxWidth: 150, newRockFrameCount: 75, burst: null},
   6: {rockSpeed: 7, newRockMaxWidth: 150, newRockFrameCount: 65, burst: null},
-  7: {rockSpeed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: null}
-  // TODO: 8: {rockSpeed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: 1200}
+  7: {rockSpeed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: null},
+  8: {rockSpeed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: 1200}
 };
 
 function newGame() {
@@ -337,8 +337,8 @@ game.render(function (ctx) {
 
   // Draw level badges
   for (var badge = 0; badge < currentLevel; badge++) {
-    var x = game.width - badge * 40 - 24;
-    var y = game.height - 16;
+    var x = (game.width - (badge % 4) * 40 - 24);
+    var y = (game.height - 16) - (24 * Math.floor(badge / 4));
     helpers.fillEllipse(ctx, x, y, 8, 2, 1, '#ff4');
     helpers.fillCircle(ctx, x + 5, y - 2, 2, '#330');
   }
