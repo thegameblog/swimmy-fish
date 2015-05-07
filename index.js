@@ -23,7 +23,7 @@ var clickLock = 0;
 var levelStartFrames = [0, 120, 660, 1260, 2000, 3200, 4400, 5600, 6800];
 var levelStartScore = [];
 for (var levelStartScoreIndex = 0; levelStartScoreIndex < levelStartFrames.length; levelStartScoreIndex++) {
-  levelStartScore.push(Math.floor(levelStartFrames[levelStartScoreIndex] / scoreFrameCount * scoreIncrement / 2));
+  levelStartScore.push(Math.floor(levelStartFrames[levelStartScoreIndex] / scoreFrameCount * scoreIncrement / 2 / 100) * 100);
 }
 var levels = {
   0: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 60, burst: null},
