@@ -97,7 +97,7 @@ function newBubble(probability) {
   }
 }
 
-Gesso.getCanvas().addEventListener('mousedown', function (e) {
+function thrust(e) {
   e.preventDefault();
 
   // Create new player, if not currently playing
@@ -114,7 +114,10 @@ Gesso.getCanvas().addEventListener('mousedown', function (e) {
   }
 
   return false;
-});
+}
+
+Gesso.getCanvas().addEventListener('mousedown', thrust);
+Gesso.getCanvas().addEventListener('touchstart', thrust);
 
 game.update(function () {
   // Update frame count, which represents time passed
