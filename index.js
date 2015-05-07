@@ -8,6 +8,8 @@ var player = null;
 var rocks = [];
 var frameCount = 0;
 var currentLevel = 0;
+var scoreFrameCount = 6;
+var scoreIncrement = 100;
 var highScore = 0;
 var highScoreTime = 0;
 var highScoreMaxTime = 60;
@@ -18,7 +20,10 @@ var bubbles = [];
 var splash = [];
 
 var levelStartFrames = [0, 60, 400, 800, 1200, 2400, 3600, 4800];
-var levelStartScore = [100, 500, 3350, 6700, 10000, 20000, 30000, 40000];
+var levelStartScore = [];
+for (var levelStartScoreIndex = 0; levelStartScoreIndex < levelStartFrames.length; levelStartScoreIndex++) {
+  levelStartScore.push(Math.floor(levelStartFrames[levelStartScoreIndex] / scoreFrameCount * scoreIncrement / 2));
+}
 var levels = {
   0: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 60, burst: null},
   1: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 200, burst: null},
@@ -226,8 +231,8 @@ game.update(function () {
   }
 
   // Update player
-  if (frameCount % 6 === 0) {
-    player.score += 100;
+  if (frameCount % scoreFrameCount === 0) {
+    player.score += scoreIncrement;
   }
   if (player.sy > 1) {
     player.sy -= 0.1;
