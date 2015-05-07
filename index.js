@@ -6,6 +6,9 @@ var gravity = 0.3;
 var seaLevel = 80;
 var player = null;
 var rocks = [];
+var burstItem = null;
+var burstSpeed = 2;
+var burstCount = 0;
 var frameCount = 0;
 var currentLevel = -1;
 var scoreFrameCount = 6;
@@ -26,15 +29,15 @@ for (var levelStartScoreIndex = 0; levelStartScoreIndex < levelStartFrames.lengt
   levelStartScore.push(Math.floor(levelStartFrames[levelStartScoreIndex] / scoreFrameCount * scoreIncrement / 2 / 100) * 100);
 }
 var levels = {
-  0: {speed: 4, newRockMaxWidth: 100, newRockFrameCount: 60, burst: null},
-  1: {speed: 4, newRockMaxWidth: 100, newRockFrameCount: 200, burst: null},
-  2: {speed: 4.2, newRockMaxWidth: 100, newRockFrameCount: 100, burst: null},
-  3: {speed: 4.4, newRockMaxWidth: 100, newRockFrameCount: 80, burst: null},
-  4: {speed: 5, newRockMaxWidth: 120, newRockFrameCount: 75, burst: null},
-  5: {speed: 6, newRockMaxWidth: 150, newRockFrameCount: 75, burst: null},
-  6: {speed: 7, newRockMaxWidth: 150, newRockFrameCount: 65, burst: null},
-  7: {speed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: null},
-  8: {speed: 8, newRockMaxWidth: 250, newRockFrameCount: 65, burst: 1200}
+  0: {speed: 4, newRockMaxWidth: 100, newRockFrameCount: 60, newBurstItemFrameCount: null},
+  1: {speed: 4, newRockMaxWidth: 100, newRockFrameCount: 200, newBurstItemFrameCount: null},
+  2: {speed: 4.2, newRockMaxWidth: 100, newRockFrameCount: 100, newBurstItemFrameCount: null},
+  3: {speed: 4.4, newRockMaxWidth: 100, newRockFrameCount: 80, newBurstItemFrameCount: null},
+  4: {speed: 5, newRockMaxWidth: 120, newRockFrameCount: 75, newBurstItemFrameCount: null},
+  5: {speed: 6, newRockMaxWidth: 150, newRockFrameCount: 75, newBurstItemFrameCount: null},
+  6: {speed: 7, newRockMaxWidth: 150, newRockFrameCount: 65, newBurstItemFrameCount: null},
+  7: {speed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, newBurstItemFrameCount: null},
+  8: {speed: 8, newRockMaxWidth: 250, newRockFrameCount: 65, newBurstItemFrameCount: 1200}
 };
 
 function newGame() {
@@ -59,6 +62,8 @@ function newGame() {
   };
   // Reset frame count
   frameCount = levelStartFrames[currentLevel];
+  // Reset burst
+  burstCount = 0;
 }
 
 function endGame() {
@@ -160,6 +165,24 @@ game.update(function () {
 
   // Get current level
   var level = levels[currentLevel];
+
+  // Update burst
+  if (player && level.newBurstItemFrameCount) {
+    burstCount += 1;
+    // Add the burst item such that it can be intersected right after a long jump
+    if (burstCount >= level.newBurstItemFrameCount && (frameCount - level.newRockFrameCount * (level.speed / burstSpeed) - level.newRockMaxWidth - 4) % level.newRockFrameCount === 0 && !burstItem) {
+      burstItem = {x: game.width, y: 36, r: 6};
+      burstCount = 0;
+    }
+  }
+  if (burstItem) {
+    burstItem.x -= burstSpeed;
+    burstItem.y = seaLevel - 16 - Math.abs(Math.sin(frameCount / 12)) * 24;
+    // Delete burst item when out of bounds
+    if (burstItem.x + burstItem.r < 0) {
+      burstItem = null;
+    }
+  }
 
   // Update rocks
   for (var r = 0; r < rocks.length; r++) {
@@ -310,6 +333,11 @@ game.render(function (ctx) {
   grd.addColorStop(1.000, 'rgba(0, 127, 255, 0.200)');
   ctx.fillStyle = grd;
   ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
+
+  // Draw burst
+  if (burstItem) {
+    helpers.fillCircle(ctx, burstItem.x, burstItem.y, burstItem.r, '#D34384');
+  }
 
   // Draw splash
   for (var s = 0; s < splash.length; s++) {
