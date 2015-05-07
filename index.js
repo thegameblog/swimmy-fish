@@ -45,6 +45,7 @@ function newGame() {
     velocity: -10,
     jumpVelocity: 8,
     terminalVelocity: 7,
+    levelUpBubbles: 0,
     score: levelStartScore[currentLevel]
   };
   // Reset frame count
@@ -119,6 +120,14 @@ game.update(function () {
   if (player) {
     if (currentLevel + 1 < levelStartFrames.length && frameCount >= levelStartFrames[currentLevel + 1]) {
       currentLevel += 1;
+      player.levelUpBubbles = 20 * currentLevel + 10;
+    }
+    // Show level up effect
+    if (player.levelUpBubbles > 0) {
+      player.levelUpBubbles -= 1;
+      for (var u = 0; u < 10; u++) {
+        newBubble(10);
+      }
     }
   }
 
