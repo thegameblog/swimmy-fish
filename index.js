@@ -86,7 +86,7 @@ function endGame() {
 
   // Set to not playing
   player = null;
-  clickLock = 60;
+  clickLock = 30;
 }
 
 function newSplash() {
