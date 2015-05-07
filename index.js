@@ -357,7 +357,7 @@ game.render(function (ctx) {
   grd = ctx.createLinearGradient(game.width / 2, seaLevel, game.width / 2, game.height);
   grd.addColorStop(0.000, 'rgba(0, 127, 255, 0.100)');
   grd.addColorStop(0.700, 'rgba(0, 63, 127, 0.100)');
-  grd.addColorStop(1.000, 'rgba(0, 63, 127, 0.500)');
+  grd.addColorStop(1.000, 'rgba(0, 63, 127, 0.600)');
   ctx.fillStyle = grd;
   ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
 
