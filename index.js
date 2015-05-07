@@ -34,7 +34,7 @@ var levels = {
   5: {speed: 6, newRockMaxWidth: 150, newRockFrameCount: 75, burst: null},
   6: {speed: 7, newRockMaxWidth: 150, newRockFrameCount: 65, burst: null},
   7: {speed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: null},
-  8: {speed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: 1200}
+  8: {speed: 8, newRockMaxWidth: 250, newRockFrameCount: 65, burst: 1200}
 };
 
 function newGame() {
