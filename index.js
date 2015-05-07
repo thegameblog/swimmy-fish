@@ -313,19 +313,19 @@ game.render(function (ctx) {
 
   // Draw score
   if (player || highScore) {
-    ctx.font = 'bold 24px sans-serif';
-    ctx.textAlign = 'right';
-    helpers.outlineText(ctx, 'Score: ' + (player ? player.score : 0), game.width - 30, 32, '#333', '#fff');
+    ctx.font = 'bold 20px sans-serif';
+    ctx.textAlign = 'center';
+    helpers.outlineText(ctx, player ? player.score : 'High Score', game.width / 2, 22, '#333', '#fff');
   }
   if (highScore) {
-    ctx.font = 'bold 24px sans-serif';
-    helpers.outlineText(ctx, 'Best: ' + highScore, game.width - 30, 64, '#333', '#fff');
+    ctx.font = 'bold 20px sans-serif';
+    helpers.outlineText(ctx, highScore, game.width / 2, 51, '#333', '#fff');
     if (highScoreTime > 0) {
       var offset = (highScoreTime) * 2;
       var fade = (highScoreTime / highScoreMaxTime * 2);
       ctx.font = 'bold ' + (24 + offset) + 'px sans-serif';
       ctx.fillStyle = 'rgba(255, 255, 255, ' + fade + ')';
-      ctx.fillText('Best: ' + highScore, game.width - 30 + (offset * 0.25), 64 + (offset * 1.5));
+      ctx.fillText(highScore, game.width / 2, 64 + (offset * 1.5));
     }
   }
 
@@ -337,8 +337,8 @@ game.render(function (ctx) {
 
   // Draw level badges
   for (var badge = 0; badge < currentLevel; badge++) {
-    var x = (game.width - (badge % 4) * 40 - 24);
-    var y = (game.height - 16) - (24 * Math.floor(badge / 4));
+    var x = (game.width - (badge % 4) * 40 - 22);
+    var y = 16 + (24 * Math.floor(badge / 4));
     helpers.fillEllipse(ctx, x, y, 8, 2, 1, '#ff4');
     helpers.fillCircle(ctx, x + 5, y - 2, 2, '#330');
   }
