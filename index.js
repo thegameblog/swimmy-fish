@@ -19,7 +19,7 @@ var bottomLeeway = 60;
 var bubbles = [];
 var splash = [];
 
-var levelStartFrames = [0, 60, 600, 1100, 2000, 3200, 4400, 5600, 6800];
+var levelStartFrames = [0, 120, 660, 1260, 2000, 3200, 4400, 5600, 6800];
 var levelStartScore = [];
 for (var levelStartScoreIndex = 0; levelStartScoreIndex < levelStartFrames.length; levelStartScoreIndex++) {
   levelStartScore.push(Math.floor(levelStartFrames[levelStartScoreIndex] / scoreFrameCount * scoreIncrement / 2));
