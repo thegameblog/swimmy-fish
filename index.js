@@ -225,6 +225,7 @@ game.update(function () {
     }
   }
 
+  // Update high score animation
   if (highScoreTime > 0) {
     highScoreTime -= 1;
   }
@@ -338,18 +339,18 @@ game.render(function (ctx) {
     }
   }
 
-  if (player) {
-    // Draw player
-    helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
-    helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
-  }
-
   // Draw level badges
   for (var badge = 0; badge < currentLevel; badge++) {
     var x = (game.width - (badge % 4) * 40 - 22);
     var y = 16 + (24 * Math.floor(badge / 4));
     helpers.fillEllipse(ctx, x, y, 8, 2, 1, '#ff4');
     helpers.fillCircle(ctx, x + 5, y - 2, 2, '#330');
+  }
+
+  if (player) {
+    // Draw player
+    helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
+    helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
   }
 
   // Draw water depth gradient
@@ -366,10 +367,10 @@ game.render(function (ctx) {
       ctx.font = 'bold 64px sans-serif';
       ctx.textAlign = 'center';
       if (highScore) {
-        helpers.outlineText(ctx, 'Game over!', (game.width / 2), (game.height / 2) - 30, '#333', '#fff');
-        helpers.outlineText(ctx, 'Click again!', (game.width / 2), (game.height / 2) + 40, '#333', '#fff');
+        helpers.outlineText(ctx, 'Game over!', game.width / 2, game.height / 2 - 30, '#333', '#fff');
+        helpers.outlineText(ctx, 'Click again!', game.width / 2, game.height / 2 + 40, '#333', '#fff');
       } else {
-        helpers.outlineText(ctx, 'Click to start!', (game.width / 2), (game.height / 2), '#333', '#fff');
+        helpers.outlineText(ctx, 'Click to start!', game.width / 2, game.height / 2, '#333', '#fff');
       }
     }
   }
