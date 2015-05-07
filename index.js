@@ -9,6 +9,7 @@ var rocks = [];
 var burstItem = null;
 var burstSpeed = 2;
 var burstCount = 0;
+var burstMode = false;
 var frameCount = 0;
 var currentLevel = -1;
 var scoreFrameCount = 6;
@@ -182,6 +183,13 @@ game.update(function () {
     if (burstItem.x + burstItem.r < 0) {
       burstItem = null;
     }
+  }
+  // Check for intersection with player
+  if (player && burstItem &&
+      helpers.intersected({x: player.x - 10, y: player.y - 10, width: 40, height: 20},
+        {x: burstItem.x, y: burstItem.y, width: burstItem.r, height: burstItem.r})) {
+    burstMode = true;
+    burstItem = null;
   }
 
   // Update rocks
