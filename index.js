@@ -26,15 +26,15 @@ for (var levelStartScoreIndex = 0; levelStartScoreIndex < levelStartFrames.lengt
   levelStartScore.push(Math.floor(levelStartFrames[levelStartScoreIndex] / scoreFrameCount * scoreIncrement / 2 / 100) * 100);
 }
 var levels = {
-  0: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 60, burst: null},
-  1: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 200, burst: null},
-  2: {rockSpeed: 4.2, newRockMaxWidth: 100, newRockFrameCount: 100, burst: null},
-  3: {rockSpeed: 4.4, newRockMaxWidth: 100, newRockFrameCount: 80, burst: null},
-  4: {rockSpeed: 5, newRockMaxWidth: 120, newRockFrameCount: 75, burst: null},
-  5: {rockSpeed: 6, newRockMaxWidth: 150, newRockFrameCount: 75, burst: null},
-  6: {rockSpeed: 7, newRockMaxWidth: 150, newRockFrameCount: 65, burst: null},
-  7: {rockSpeed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: null},
-  8: {rockSpeed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: 1200}
+  0: {speed: 4, newRockMaxWidth: 100, newRockFrameCount: 60, burst: null},
+  1: {speed: 4, newRockMaxWidth: 100, newRockFrameCount: 200, burst: null},
+  2: {speed: 4.2, newRockMaxWidth: 100, newRockFrameCount: 100, burst: null},
+  3: {speed: 4.4, newRockMaxWidth: 100, newRockFrameCount: 80, burst: null},
+  4: {speed: 5, newRockMaxWidth: 120, newRockFrameCount: 75, burst: null},
+  5: {speed: 6, newRockMaxWidth: 150, newRockFrameCount: 75, burst: null},
+  6: {speed: 7, newRockMaxWidth: 150, newRockFrameCount: 65, burst: null},
+  7: {speed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: null},
+  8: {speed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: 1200}
 };
 
 function newGame() {
@@ -163,7 +163,7 @@ game.update(function () {
 
   // Update rocks
   for (var r = 0; r < rocks.length; r++) {
-    rocks[r].x -= level.rockSpeed;
+    rocks[r].x -= level.speed;
     // Delete rock when out of bounds
     if (rocks[r].x + rocks[r].width < 0) {
       rocks.splice(r, 1);
