@@ -38,7 +38,6 @@ function newGame() {
   }
   // Create player
   player = {
-    playing: false,
     x: 100,
     y: 200,
     sy: 1,
