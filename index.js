@@ -7,7 +7,7 @@ var seaLevel = 80;
 var player = null;
 var rocks = [];
 var frameCount = 0;
-var currentLevel = 0;
+var currentLevel = -1;
 var scoreFrameCount = 6;
 var scoreIncrement = 100;
 var highScore = 0;
@@ -37,6 +37,10 @@ var levels = {
 };
 
 function newGame() {
+  // First play
+  if (currentLevel === -1) {
+    currentLevel = 0;
+  }
   // Reduce level
   if (currentLevel > 0) {
     currentLevel -= 1;
@@ -122,6 +126,11 @@ Gesso.getCanvas().addEventListener('touchstart', thrust);
 game.update(function () {
   // Update frame count, which represents time passed
   frameCount += 1;
+
+  // Show nothing if this is the first time playing
+  if (currentLevel === -1) {
+    return;
+  }
 
   // Set difficulty as a function of time
   if (player) {
