@@ -127,7 +127,7 @@ game.update(function () {
   // Update frame count, which represents time passed
   frameCount += 1;
 
-  // Show nothing if this is the first time playing
+  // Do nothing else if this is the first time playing
   if (currentLevel === -1) {
     return;
   }
