@@ -18,6 +18,7 @@ var bubbles = [];
 var splash = [];
 
 var levelStartFrames = [0, 60, 400, 800, 1200, 2400, 3600, 4800];
+var levelStartScore = [100, 500, 3350, 6700, 10000, 20000, 30000, 40000];
 var levels = {
   0: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 60, burst: null},
   1: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 200, burst: null},
@@ -44,7 +45,7 @@ function newGame() {
     velocity: -10,
     jumpVelocity: 8,
     terminalVelocity: 7,
-    score: 0
+    score: levelStartScore[currentLevel]
   };
   // Reset frame count
   frameCount = levelStartFrames[currentLevel];
