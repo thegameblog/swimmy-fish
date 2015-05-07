@@ -7,6 +7,7 @@ var seaLevel = 80;
 var player = null;
 var rocks = [];
 var frameCount = 0;
+var currentLevel = 0;
 var highScore = 0;
 var highScoreTime = 0;
 var highScoreMaxTime = 60;
@@ -15,6 +16,19 @@ var endGameParticleCount = 100;
 var bottomLeeway = 60;
 var bubbles = [];
 var splash = [];
+
+var levelStartFrames = [0, 60, 400, 800, 1200, 2400, 3600, 4800];
+var levels = {
+  0: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 60, burst: null},
+  1: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 200, burst: null},
+  2: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 100, burst: null},
+  3: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 80, burst: null},
+  4: {rockSpeed: 5, newRockMaxWidth: 120, newRockFrameCount: 75, burst: null},
+  5: {rockSpeed: 6, newRockMaxWidth: 150, newRockFrameCount: 75, burst: null},
+  6: {rockSpeed: 7, newRockMaxWidth: 150, newRockFrameCount: 65, burst: null},
+  7: {rockSpeed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: null}
+  // TODO: 8: {rockSpeed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, burst: 1200}
+};
 
 function newGame() {
   player = {
@@ -29,6 +43,7 @@ function newGame() {
   };
   // Reset frame count
   frameCount = 0;
+  currentLevel = 0;
 }
 
 function endGame() {
@@ -96,46 +111,18 @@ game.update(function () {
   frameCount += 1;
 
   // Set difficulty as a function of time
-  var rockSpeed;
-  var newRockMaxWidth;
-  var newRockFrameCount;
-  if (frameCount <= 60) {
-    rockSpeed = 4;
-    newRockMaxWidth = 100;
-    newRockFrameCount = 60;
-  } else if (frameCount <= 400) {
-    rockSpeed = 4;
-    newRockMaxWidth = 100;
-    newRockFrameCount = 200;
-  } else if (frameCount <= 800) {
-    rockSpeed = 4;
-    newRockMaxWidth = 100;
-    newRockFrameCount = 100;
-  } else if (frameCount <= 1200) {
-    rockSpeed = 4;
-    newRockMaxWidth = 100;
-    newRockFrameCount = 80;
-  } else if (frameCount <= 2400) {
-    rockSpeed = 5;
-    newRockMaxWidth = 120;
-    newRockFrameCount = 75;
-  } else if (frameCount <= 3600) {
-    rockSpeed = 6;
-    newRockMaxWidth = 150;
-    newRockFrameCount = 75;
-  } else if (frameCount <= 4800) {
-    rockSpeed = 7;
-    newRockMaxWidth = 150;
-    newRockFrameCount = 65;
-  } else {
-    rockSpeed = 8;
-    newRockMaxWidth = 225;
-    newRockFrameCount = 65;
+  if (player) {
+    if (currentLevel + 1 < levelStartFrames.length && frameCount >= levelStartFrames[currentLevel + 1]) {
+      currentLevel += 1;
+    }
   }
+
+  // Get current level
+  var level = levels[currentLevel];
 
   // Update rocks
   for (var r = 0; r < rocks.length; r++) {
-    rocks[r].x -= rockSpeed;
+    rocks[r].x -= level.rockSpeed;
     // Delete rock when out of bounds
     if (rocks[r].x + rocks[r].width < 0) {
       rocks.splice(r, 1);
@@ -144,13 +131,13 @@ game.update(function () {
   }
 
   // Create a new rock
-  if (frameCount % newRockFrameCount === 0) {
+  if (frameCount % level.newRockFrameCount === 0) {
     var floater = !!helpers.randInt(0, 1);
     var height = helpers.randInt(200, 300);
     rocks.push({
       x: game.width,
       y: floater ? seaLevel - (10 * helpers.randInt(1, 2)) : game.height - height,
-      width: helpers.randInt(30, newRockMaxWidth),
+      width: helpers.randInt(30, level.newRockMaxWidth),
       height: height
     });
   }
