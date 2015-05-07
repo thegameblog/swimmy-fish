@@ -327,6 +327,14 @@ game.render(function (ctx) {
     helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
   }
 
+  // Draw level badges
+  for (var badge = 0; badge < currentLevel; badge++) {
+    var x = game.width - badge * 40 - 24;
+    var y = game.height - 16;
+    helpers.fillEllipse(ctx, x, y, 8, 2, 1, '#ff4');
+    helpers.fillCircle(ctx, x + 5, y - 2, 2, '#330');
+  }
+
   // Draw water depth gradient
   grd = ctx.createLinearGradient(game.width / 2, seaLevel, game.width / 2, game.height);
   grd.addColorStop(0.000, 'rgba(0, 127, 255, 0.100)');
