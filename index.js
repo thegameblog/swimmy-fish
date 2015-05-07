@@ -19,7 +19,7 @@ var bottomLeeway = 60;
 var bubbles = [];
 var splash = [];
 
-var levelStartFrames = [0, 60, 400, 800, 1200, 2400, 3600, 4800];
+var levelStartFrames = [0, 60, 600, 1100, 2000, 3200, 4400, 5600];
 var levelStartScore = [];
 for (var levelStartScoreIndex = 0; levelStartScoreIndex < levelStartFrames.length; levelStartScoreIndex++) {
   levelStartScore.push(Math.floor(levelStartFrames[levelStartScoreIndex] / scoreFrameCount * scoreIncrement / 2));
@@ -27,8 +27,8 @@ for (var levelStartScoreIndex = 0; levelStartScoreIndex < levelStartFrames.lengt
 var levels = {
   0: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 60, burst: null},
   1: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 200, burst: null},
-  2: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 100, burst: null},
-  3: {rockSpeed: 4, newRockMaxWidth: 100, newRockFrameCount: 80, burst: null},
+  2: {rockSpeed: 4.2, newRockMaxWidth: 100, newRockFrameCount: 100, burst: null},
+  3: {rockSpeed: 4.4, newRockMaxWidth: 100, newRockFrameCount: 80, burst: null},
   4: {rockSpeed: 5, newRockMaxWidth: 120, newRockFrameCount: 75, burst: null},
   5: {rockSpeed: 6, newRockMaxWidth: 150, newRockFrameCount: 75, burst: null},
   6: {rockSpeed: 7, newRockMaxWidth: 150, newRockFrameCount: 65, burst: null},
