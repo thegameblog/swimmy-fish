@@ -18,6 +18,7 @@ var endGameParticleCount = 100;
 var bottomLeeway = 60;
 var bubbles = [];
 var splash = [];
+var clickLock = 0;
 
 var levelStartFrames = [0, 120, 660, 1260, 2000, 3200, 4400, 5600, 6800];
 var levelStartScore = [];
@@ -85,6 +86,7 @@ function endGame() {
 
   // Set to not playing
   player = null;
+  clickLock = 60;
 }
 
 function newSplash() {
@@ -103,6 +105,11 @@ function newBubble(probability) {
 
 function thrust(e) {
   e.preventDefault();
+
+  // Prevent accidental new game click
+  if (clickLock > 0) {
+    return false;
+  }
 
   // Create new player, if not currently playing
   if (!player) {
@@ -126,6 +133,10 @@ Gesso.getCanvas().addEventListener('touchstart', thrust);
 game.update(function () {
   // Update frame count, which represents time passed
   frameCount += 1;
+
+  if (clickLock > 0) {
+    clickLock -= 1;
+  }
 
   // Do nothing else if this is the first time playing
   if (currentLevel === -1) {
