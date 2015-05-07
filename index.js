@@ -31,6 +31,11 @@ var levels = {
 };
 
 function newGame() {
+  // Reduce level
+  if (currentLevel > 0) {
+    currentLevel -= 1;
+  }
+  // Create player
   player = {
     playing: false,
     x: 100,
@@ -42,8 +47,7 @@ function newGame() {
     score: 0
   };
   // Reset frame count
-  frameCount = 0;
-  currentLevel = 0;
+  frameCount = levelStartFrames[currentLevel];
 }
 
 function endGame() {
