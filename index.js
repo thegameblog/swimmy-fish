@@ -229,8 +229,8 @@ game.update(function () {
   // Create a new rock
   if (!burstMode && !longJump) {
     if (frameCount % level.newRockFrameCount === 0) {
-      var floater = !!helpers.randInt(0, 1);
-      var height = helpers.randInt(200, 300);
+      var floater = player ? !!helpers.randInt(0, 1) : false;
+      var height = helpers.randInt(200, player ? 300 : 250);
       rocks.push({
         x: game.width,
         y: floater ? seaLevel - (10 * helpers.randInt(1, 2)) : game.height - height,
