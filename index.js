@@ -10,6 +10,12 @@ var burstItem = null;
 var burstSpeed = 2;
 var burstCount = 0;
 var burstMode = false;
+var burstModeCount = 0;
+var burstModeMaxCount = 500;
+var longJump = false;
+var longJumpCompleteCount = 0;
+var longJumpCompleteMaxCount = 120;
+var longJumpCompleteScore = 1000000;
 var frameCount = 0;
 var currentLevel = -1;
 var scoreFrameCount = 6;
@@ -65,6 +71,9 @@ function newGame() {
   frameCount = levelStartFrames[currentLevel];
   // Reset burst
   burstCount = 0;
+  burstMode = false;
+  burstModeCount = 0;
+  longJump = false;
 }
 
 function endGame() {
@@ -167,8 +176,8 @@ game.update(function () {
   // Get current level
   var level = levels[currentLevel];
 
-  // Update burst
-  if (player && level.newBurstItemFrameCount) {
+  // Create new burst item
+  if (player && level.newBurstItemFrameCount && !burstMode) {
     burstCount += 1;
     // Add the burst item such that it can be intersected right after a long jump
     if (burstCount >= level.newBurstItemFrameCount && (frameCount - level.newRockFrameCount * (level.speed / burstSpeed) - level.newRockMaxWidth - 4) % level.newRockFrameCount === 0 && !burstItem) {
@@ -176,6 +185,7 @@ game.update(function () {
       burstCount = 0;
     }
   }
+  // Update burst item
   if (burstItem) {
     burstItem.x -= burstSpeed;
     burstItem.y = seaLevel - 16 - Math.abs(Math.sin(frameCount / 12)) * 24;
@@ -189,34 +199,76 @@ game.update(function () {
       helpers.intersected({x: player.x - 10, y: player.y - 10, width: 40, height: 20},
         {x: burstItem.x, y: burstItem.y, width: burstItem.r, height: burstItem.r})) {
     burstMode = true;
+    burstModeCount = 0;
     burstItem = null;
   }
 
   // Update rocks
   for (var r = 0; r < rocks.length; r++) {
     rocks[r].x -= level.speed;
+    if (burstMode) {
+      rocks[r].x -= burstModeCount / 8;
+    } else if (longJump) {
+      rocks[r].x -= 100 + level.speed;
+    }
     // Delete rock when out of bounds
     if (rocks[r].x + rocks[r].width < 0) {
       rocks.splice(r, 1);
       r--;
     }
   }
-
+  // Check for end of long jump
+  if (longJump && rocks.length === 0) {
+    longJump = false;
+    if (player) {
+      longJumpCompleteCount = longJumpCompleteMaxCount;
+      // TODO: Animate
+      player.score += longJumpCompleteScore;
+    }
+  }
   // Create a new rock
-  if (frameCount % level.newRockFrameCount === 0) {
-    var floater = !!helpers.randInt(0, 1);
-    var height = helpers.randInt(200, 300);
-    rocks.push({
-      x: game.width,
-      y: floater ? seaLevel - (10 * helpers.randInt(1, 2)) : game.height - height,
-      width: helpers.randInt(30, level.newRockMaxWidth),
-      height: height
-    });
+  if (!burstMode && !longJump) {
+    if (frameCount % level.newRockFrameCount === 0) {
+      var floater = !!helpers.randInt(0, 1);
+      var height = helpers.randInt(200, 300);
+      rocks.push({
+        x: game.width,
+        y: floater ? seaLevel - (10 * helpers.randInt(1, 2)) : game.height - height,
+        width: helpers.randInt(30, level.newRockMaxWidth),
+        height: height
+      });
+    }
+  } else if (!longJump) {
+    var v = Math.floor(burstModeCount / burstModeMaxCount * 4);
+    if (burstModeCount % 8 === 0) {
+      var h = 60 + v * 60;
+      rocks.push({
+        x: game.width,
+        y: game.height - h,
+        width: 30 + v * 50,
+        height: h
+      });
+    }
+    burstModeCount += 1;
+    if (burstModeCount >= burstModeMaxCount) {
+      burstMode = false;
+      burstModeCount = 0;
+      longJump = true;
+      rocks.push({
+        x: game.width,
+        y: seaLevel - 20,
+        width: 3000,
+        height: game.height - seaLevel
+      });
+    }
   }
 
   // Update bubbles
   for (var b = 0; b < bubbles.length; b++) {
     bubbles[b].x -= 3;
+    if (burstMode || longJump) {
+      bubbles[b].x -= ((burstModeCount) / burstModeMaxCount) * 10;
+    }
     if (helpers.randInt(1, 3) === 1) {
       bubbles[b].x -= 1;
     }
@@ -232,6 +284,12 @@ game.update(function () {
   // Randomly add a new bubble
   if (player) {
     newBubble(100);
+  }
+  // Add bubbles in burst mode
+  if (burstMode) {
+    for (var bu = 0; bu < 10; bu++) {
+      newBubble(10);
+    }
   }
   // Check for rock / bubble collisions
   for (r = 0; r < rocks.length; r++) {
@@ -394,6 +452,12 @@ game.render(function (ctx) {
     helpers.fillCircle(ctx, x + 5, y - 2, 2, '#330');
   }
 
+  // Draw burst mode meter
+  if (burstMode) {
+    var bw = 153;
+    helpers.drawMeter(ctx, game.width - bw - 5, seaLevel - 22, bw, 12, burstModeMaxCount - burstModeCount, burstModeMaxCount, '#5d4');
+  }
+
   if (player) {
     // Draw player
     helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
@@ -419,6 +483,16 @@ game.render(function (ctx) {
       } else {
         helpers.outlineText(ctx, 'Click to start!', game.width / 2, game.height / 2, '#333', '#fff');
       }
+    }
+  }
+
+  if (player && longJumpCompleteCount > 0) {
+    // Draw message
+    longJumpCompleteCount -= 1;
+    ctx.font = 'bold 72px sans-serif';
+    ctx.textAlign = 'center';
+    if (longJumpCompleteCount % 20 > 5) {
+      helpers.outlineText(ctx, 'Nice jump!', game.width / 2, game.height / 2, '#333', '#fff');
     }
   }
 });

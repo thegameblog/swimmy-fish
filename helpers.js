@@ -18,6 +18,15 @@ module.exports = {
     ctx.fillStyle = color;
     ctx.fill();
   },
+  drawMeter: function (ctx, x, y, width, height, value, max, color) {
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(x, y, width, height);
+    ctx.fillStyle = '#000';
+    ctx.fillRect(x + 2, y + 2, width - 4, height - 4);
+    ctx.fillStyle = color;
+    var meterWidth = width - 8;
+    ctx.fillRect(x + 4 + ((max - value) / max) * meterWidth, y + 4, meterWidth - ((max - value) / max) * meterWidth, height - 8);
+  },
   outlineText: function (ctx, text, x, y, color, outline) {
     ctx.fillStyle = color;
     ctx.fillText(text, x - 1, y);
