@@ -8,6 +8,6 @@
   "private": true,
   "main": "index.js",
   "dependencies": {
-    "gesso": "^0.10.1"
+    "gesso": "^0.11.0"
   }
 }

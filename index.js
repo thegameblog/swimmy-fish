@@ -118,7 +118,7 @@ function newBubble(probability) {
   }
 }
 
-function thrust(e) {
+game.click(function (e) {
   e.preventDefault();
 
   // Prevent accidental new game click
@@ -140,10 +140,7 @@ function thrust(e) {
   }
 
   return false;
-}
-
-Gesso.getCanvas().addEventListener('mousedown', thrust);
-Gesso.getCanvas().addEventListener('touchstart', thrust);
+});
 
 game.update(function () {
   // Update frame count, which represents time passed
