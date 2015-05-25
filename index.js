@@ -439,10 +439,18 @@ game.render(function (ctx) {
 
   // Draw level badges
   for (var badge = 0; badge < currentLevel; badge++) {
-    var x = (game.width - (badge % 4) * 40 - 22);
+    var x = (game.width - (badge % 4) * 28 - 16);
     var y = 16 + (24 * Math.floor(badge / 4));
-    helpers.fillEllipse(ctx, x, y, 8, 2, 1, '#ff4');
-    helpers.fillCircle(ctx, x + 5, y - 2, 2, '#330');
+    ctx.fillStyle = '#ff4';
+    ctx.beginPath();
+    ctx.moveTo(x + 8, y);
+    ctx.lineTo(x, y + 8);
+    ctx.lineTo(x, y - 8);
+    ctx.fill();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - 8, y + 8);
+    ctx.lineTo(x - 8, y - 8);
+    ctx.fill();
   }
 
   // Draw burst mode meter
