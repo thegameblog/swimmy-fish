@@ -119,8 +119,6 @@ function newBubble(probability) {
 }
 
 game.click(function (e) {
-  e.preventDefault();
-
   // Prevent accidental new game click
   if (clickLock > 0) {
     return false;
@@ -138,8 +136,6 @@ game.click(function (e) {
     player.sy = 1.6;
     newBubble(10);
   }
-
-  return false;
 });
 
 game.update(function () {
