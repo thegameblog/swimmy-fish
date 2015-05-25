@@ -29,6 +29,9 @@ var bottomLeeway = 60;
 var bubbles = [];
 var splash = [];
 var clickLock = 0;
+var respawnDanger = 0;
+var invincibility = 0;
+var invincibilityBlink = 30;
 
 var levelStartFrames = [0, 120, 660, 1260, 2000, 3200, 4400, 5600, 6800];
 var levelStartScore = [];
@@ -74,6 +77,10 @@ function newGame() {
   burstMode = false;
   burstModeCount = 0;
   longJump = false;
+  // Reset with invincibility if in danger
+  if (respawnDanger > 0) {
+    invincibility = 60 * 3;
+  }
 }
 
 function endGame() {
@@ -98,6 +105,9 @@ function endGame() {
       vy: Math.sin(angle * Math.PI / 180) * velocity
     });
   }
+
+  // Use invincibility until all rocks pass
+  respawnDanger = game.width - player.x + levels[currentLevel].newRockMaxWidth;
 
   // Set to not playing
   player = null;
@@ -168,6 +178,15 @@ game.update(function () {
 
   // Get current level
   var level = levels[currentLevel];
+
+  // Adjust invincibility
+  if (invincibility > 0) {
+    invincibility -= 1;
+  }
+  // Adjust re-spawn danger, adjusted for the current speed
+  if (respawnDanger > 0) {
+    respawnDanger = Math.max(respawnDanger - level.speed, 0);
+  }
 
   // Create new burst item
   if (player && level.newBurstItemFrameCount && !burstMode) {
@@ -330,7 +349,7 @@ game.update(function () {
 
   // Check for collisions
   for (r = 0; r < rocks.length; r++) {
-    if (helpers.intersected({x: player.x, y: player.y, width: 20, height: 10}, rocks[r])) {
+    if (invincibility === 0 && helpers.intersected({x: player.x, y: player.y, width: 20, height: 10}, rocks[r])) {
       endGame();
       return;
     }
@@ -459,9 +478,9 @@ game.render(function (ctx) {
     helpers.drawMeter(ctx, game.width - bw - 5, seaLevel - 22, bw, 12, burstModeMaxCount - burstModeCount, burstModeMaxCount, '#5d4');
   }
 
-  if (player) {
-    // Draw player
-    helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, '#ff4');
+  // Draw player
+  if (player && (invincibility % invincibilityBlink < invincibilityBlink - 4)) {
+    helpers.fillEllipse(ctx, player.x, player.y, 10, 2, player.sy, invincibility ? 'rgba(255, 255, 68, 0.5)' : '#ff4');
     helpers.fillCircle(ctx, player.x + 5, player.y - 2, 3, '#330');
   }
 
