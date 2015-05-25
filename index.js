@@ -393,7 +393,7 @@ game.render(function (ctx) {
   ctx.fillStyle = grd;
   ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
 
-  // Draw burst
+  // Draw burst item
   if (burstItem) {
     helpers.fillCircle(ctx, burstItem.x, burstItem.y, burstItem.r, '#D34384');
   }
