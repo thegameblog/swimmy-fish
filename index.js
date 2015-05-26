@@ -7,6 +7,7 @@ var seaLevel = 80;
 var player = null;
 var rocks = [];
 var burstItem = null;
+var burstItemSeen = false;
 var burstSpeed = 2;
 var burstCount = 0;
 var burstMode = false;
@@ -47,7 +48,7 @@ var levels = {
   5: {speed: 6, newRockMaxWidth: 150, newRockFrameCount: 75, newBurstItemFrameCount: null},
   6: {speed: 7, newRockMaxWidth: 150, newRockFrameCount: 65, newBurstItemFrameCount: null},
   7: {speed: 8, newRockMaxWidth: 225, newRockFrameCount: 65, newBurstItemFrameCount: null},
-  8: {speed: 8, newRockMaxWidth: 250, newRockFrameCount: 65, newBurstItemFrameCount: 1200}
+  8: {speed: 8, newRockMaxWidth: 250, newRockFrameCount: 65, newBurstItemFrameCount: 120, newBurstItemFrameRepeat: 1200}
 };
 
 function newGame() {
@@ -72,7 +73,8 @@ function newGame() {
   };
   // Reset frame count
   frameCount = levelStartFrames[currentLevel];
-  // Reset burst
+  // Reset burst mode
+  burstItemSeen = false;
   burstCount = 0;
   burstMode = false;
   burstModeCount = 0;
@@ -192,8 +194,11 @@ game.update(function () {
   if (player && level.newBurstItemFrameCount && !burstMode) {
     burstCount += 1;
     // Add the burst item such that it can be intersected right after a long jump
-    if (burstCount >= level.newBurstItemFrameCount && (frameCount - level.newRockFrameCount * (level.speed / burstSpeed) - level.newRockMaxWidth - 4) % level.newRockFrameCount === 0 && !burstItem) {
+    if (!burstItem &&
+        (burstCount >= (!burstItemSeen ? level.newBurstItemFrameCount : level.newBurstItemFrameRepeat)) &&
+        (frameCount - level.newRockFrameCount * (level.speed / burstSpeed) - level.newRockMaxWidth - 4) % level.newRockFrameCount === 0) {
       burstItem = {x: game.width, y: 36, r: 6};
+      burstItemSeen = true;
       burstCount = 0;
     }
   }
