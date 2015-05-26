@@ -111,7 +111,7 @@ function endGame() {
   }
 
   // Bad jump if in burst mode
-  if (burstMode) {
+  if (burstMode || longJump) {
     badJump = true;
   }
 
@@ -139,7 +139,7 @@ function newBubble(probability) {
 
 game.click(function (e) {
   // Prevent accidental new game click
-  if (clickLock > 0) {
+  if (clickLock > 0 || longJump) {
     return false;
   }
 
