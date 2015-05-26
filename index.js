@@ -17,6 +17,7 @@ var longJump = false;
 var longJumpCompleteCount = 0;
 var longJumpCompleteMaxCount = 120;
 var longJumpCompleteScore = 1000000;
+var badJump = false;
 var frameCount = 0;
 var currentLevel = -1;
 var scoreFrameCount = 6;
@@ -79,6 +80,7 @@ function newGame() {
   burstMode = false;
   burstModeCount = 0;
   longJump = false;
+  badJump = false;
   // Reset with invincibility if in danger
   if (respawnDanger > 0) {
     invincibility = 60 * 3;
@@ -106,6 +108,11 @@ function endGame() {
       vx: Math.cos(angle * Math.PI / 180) * velocity - 6,
       vy: Math.sin(angle * Math.PI / 180) * velocity
     });
+  }
+
+  // Bad jump if in burst mode
+  if (burstMode) {
+    badJump = true;
   }
 
   // Use invincibility until all rocks pass
@@ -237,7 +244,7 @@ game.update(function () {
   // Check for end of long jump
   if (longJump && rocks.length === 0) {
     longJump = false;
-    if (player) {
+    if (!badJump) {
       longJumpCompleteCount = longJumpCompleteMaxCount;
       // TODO: Animate
       player.score += longJumpCompleteScore;
