@@ -137,7 +137,7 @@ function newBubble(probability) {
   }
 }
 
-game.click(function (e) {
+game.click(function () {
   // Prevent accidental new game click
   if (clickLock > 0 || longJump) {
     return false;
