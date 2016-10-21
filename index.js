@@ -20,6 +20,7 @@ var longJumpCompleteScore = 1000000;
 var badJump = false;
 var frameCount = 0;
 var currentLevel = -1;
+// TODO: var scoreBuffer = 0;
 var scoreFrameCount = 6;
 var scoreIncrement = 100;
 var highScore = 0;
