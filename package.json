@@ -7,6 +7,10 @@
   "license": "MIT",
   "private": true,
   "main": "index.js",
+  "scripts": {
+    "start": "gesso serve",
+    "build": "gesso build"
+  },
   "dependencies": {
     "gesso": "^0.11.0"
   }
