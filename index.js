@@ -414,13 +414,13 @@ game.render(function (ctx) {
 
   // Water lighting (note: coordinates are off, but the mistake looks better)
   grd = ctx.createLinearGradient(0, 0, game.width, game.height - seaLevel);
-  grd.addColorStop(0.000, 'rgba(0, 127, 255, 0.200)');
-  grd.addColorStop(0.100, 'rgba(255, 255, 255, 0.200)');
-  grd.addColorStop(0.200, 'rgba(0, 127, 255, 0.200)');
-  grd.addColorStop(0.500, 'rgba(255, 255, 255, 0.200)');
-  grd.addColorStop(0.600, 'rgba(0, 127, 255, 0.200)');
-  grd.addColorStop(0.800, 'rgba(255, 255, 255, 0.200)');
-  grd.addColorStop(1.000, 'rgba(0, 127, 255, 0.200)');
+  grd.addColorStop(0.000, 'rgba(0, 127, 255, 0.2)');
+  grd.addColorStop(0.100, 'rgba(255, 255, 255, 0.2)');
+  grd.addColorStop(0.200, 'rgba(0, 127, 255, 0.2)');
+  grd.addColorStop(0.500, 'rgba(255, 255, 255, 0.2)');
+  grd.addColorStop(0.600, 'rgba(0, 127, 255, 0.2)');
+  grd.addColorStop(0.800, 'rgba(255, 255, 255, 0.2)');
+  grd.addColorStop(1.000, 'rgba(0, 127, 255, 0.2)');
   ctx.fillStyle = grd;
   ctx.fillRect(0, seaLevel, game.width, game.height - seaLevel);
 
