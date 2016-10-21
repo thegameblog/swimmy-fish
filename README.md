@@ -1,38 +1,27 @@
 Swimmy Fish
 ===========
 
-[![Screenshot][]][play]
+[![Screenshot](screenshot.png)](http://gameblog.gessojs.com/swimmy-fish)
 
-Just keep swimming. And clicking. Swim over and under obstacles to survive
-as long as you can.
 
-[Play it!][play]
+Just keep swimming. And clicking. Swim over and under obstacles to survive as long as you can.
+
+[Play it!](http://gameblog.gessojs.com/swimmy-fish)
 
 
 Running locally
 ---------------
 
-1. Make sure [Gesso][] is installed
-
-   ```bash
-   $ npm install -g gesso
-   ```
-
-2. Install dependencies
+1. Install dependencies
 
    ```bash
    $ npm install
    ```
 
-3. Run the server
+2. Run the development server
 
    ```bash
-   $ gesso serve
+   $ npm start
    ```
 
 Now visit [http://localhost:63550](http://localhost:63550/).
-
-
-[screenshot]: screenshot.png
-[play]: http://gameblog.gessojs.com/swimmy-fish/
-[gesso]: http://github.com/gessojs/gessojs
