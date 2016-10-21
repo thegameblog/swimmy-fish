@@ -138,7 +138,7 @@ function newBubble(probability) {
   }
 }
 
-game.click(function () {
+function click() {
   // Prevent accidental new game click
   if (clickLock > 0 || longJump) {
     return false;
@@ -155,6 +155,14 @@ game.click(function () {
     player.velocity = -player.jumpVelocity;
     player.sy = 1.6;
     newBubble(10);
+  }
+}
+
+game.click(click);
+game.keydown(function (e) {
+  if (e.which === 32) {
+    click();
+    return true;
   }
 });
 
