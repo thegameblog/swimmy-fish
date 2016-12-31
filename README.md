@@ -1,12 +1,12 @@
 Swimmy Fish
 ===========
 
-[![Screenshot](screenshot.png)](http://gameblog.gessojs.com/swimmy-fish)
+[![Screenshot](screenshot.png)](http://thegameblog.com/swimmy-fish)
 
 
 Just keep swimming. And clicking. Swim over and under obstacles to survive as long as you can.
 
-[Play it!](http://gameblog.gessojs.com/swimmy-fish)
+[Play it!](http://thegameblog.com/swimmy-fish)
 
 
 Running locally
